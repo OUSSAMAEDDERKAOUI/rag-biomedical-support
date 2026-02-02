@@ -1,0 +1,47 @@
+services:
+
+  api:
+    build: .
+    container_name: rag_api
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+      - chroma
+    restart: always
+
+  db:
+    image: postgres:15
+    container_name: rag_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: rag_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+
+  chroma:
+    image: ghcr.io/chroma-core/chroma:latest
+    container_name: rag_chroma
+    ports:
+      - "8001:8000"
+    volumes:
+      - chroma_data:/chroma
+    restart: always
+
+  adminer:
+    image: adminer
+    container_name: rag-adminer
+    restart: always
+    ports:
+      - 8080:8080
+volumes:
+  postgres_data:
+  chroma_data:
