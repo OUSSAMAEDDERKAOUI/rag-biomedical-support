@@ -6,9 +6,9 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
 
-    EMBEDDING_MODEL: str
-    VECTOR_DB: str
-
+    embedding_model: str = "all-MiniLM-L6-v2"
+    vector_db: str = "chroma"
+    persist_directory: str = "./vectorstore"
     class Config:
         env_file = ".env"
 

@@ -1,3 +1,4 @@
+
 fastapi
 uvicorn
 pydantic
@@ -5,10 +6,23 @@ pydantic-settings
 sqlalchemy
 psycopg2-binary
 python-dotenv
-passlib[bcrypt]
+
+# Auth
+passlib[argon2]
 python-jose
 email-validator
+
+# RAG & NLP
 langchain
+langchain-community
+langchain-experimental
 chromadb
 sentence-transformers
-passlib[argon2]
+
+# PDF + Images
+unstructured
+unstructured[pdf]
+pdf2image
+pillow
+opencv-python
+requests

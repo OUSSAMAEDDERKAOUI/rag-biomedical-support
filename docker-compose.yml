@@ -12,6 +12,10 @@ services:
     depends_on:
       - db
       - chroma
+      - ollama
+    environment:
+      - CHROMA_HOST=http://chroma:8000
+      - OLLAMA_URL=http://ollama:11434/api/generate
     restart: always
 
   db:
@@ -36,12 +40,23 @@ services:
       - chroma_data:/chroma
     restart: always
 
+  ollama:
+    image: ollama/ollama:latest
+    container_name: rag_ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    restart: always
+
   adminer:
     image: adminer
     container_name: rag-adminer
     restart: always
     ports:
       - 8080:8080
+
 volumes:
   postgres_data:
   chroma_data:
+  ollama_data:
