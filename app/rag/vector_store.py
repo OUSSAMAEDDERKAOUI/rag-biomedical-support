@@ -1,11 +1,15 @@
 import chromadb
-from langchain.vectorstores import Chroma
+from langchain_community.vectorstores import Chroma
 from app.rag.embeddings import get_embeddings
 import os
 
 def store_chunks(chunks):
 
-    client = chromadb.HttpClient(host="chroma", port=8000)
+
+    client = chromadb.HttpClient(
+        host=os.getenv("CHROMA_HOST")
+    )
+
 
     vectorstore = Chroma(
         client=client,
@@ -20,5 +24,7 @@ def store_chunks(chunks):
         texts=texts,
         metadatas=metadatas
     )
+    data = vectorstore._collection.get(limit=10)
+    print(data)
 
     return vectorstore

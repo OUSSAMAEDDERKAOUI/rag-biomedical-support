@@ -3,7 +3,7 @@ from app.rag.pipeline import build_pipeline
 
 router = APIRouter()
 
-@router.post("/index")
+@router.post("/")
 async def index_pdf(file: UploadFile = File(...)):
 
     path = f"data/raw_pdfs/{file.filename}"
