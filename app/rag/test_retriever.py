@@ -6,7 +6,7 @@ retriever = get_retriever()
 
 print(" Retriever prêt")
 
-query = "Qu'est-ce que   Continuous Integration ?"
+query = "Qu'est-ce que   le Laveur de microplaques ?"
 
 print(f"\n Recherche pour : {query}\n")
 
