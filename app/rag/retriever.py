@@ -68,11 +68,9 @@ def get_retriever():
 
     texts = [d["text"] for d in docs]
 
-    # ===== BM25 Retriever =====
     bm25_retriever = BM25Retriever.from_texts(texts)
     bm25_retriever.k = 6
 
-    # ===== Combinaison hybride =====
     hybrid_retriever = EnsembleRetriever(
         retrievers=[vector_retriever, bm25_retriever],
         weights=[0.6, 0.4]

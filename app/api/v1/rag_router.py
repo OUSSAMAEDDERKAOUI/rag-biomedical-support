@@ -21,7 +21,7 @@ async def index_pdf(file: UploadFile = File(...)):
 
 
 @router.post("/ask")
-async def ask(data: dict):
+async def ask(data:str):
 
     question = data.get("question")
 

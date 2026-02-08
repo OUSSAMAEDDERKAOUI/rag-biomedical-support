@@ -73,6 +73,7 @@ services:
 
     volumes:
       - ./data:/app/data
+      - ./:/app 
       - hf_cache:/root/.cache/huggingface
 
     depends_on:

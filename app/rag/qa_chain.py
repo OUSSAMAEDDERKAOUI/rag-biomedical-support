@@ -23,7 +23,7 @@ def get_qa_chain():
 
     llm = Ollama(
       model="mistral",
-      temperature=0.1,
+      temperature=0.3,
       top_k=10,
       top_p=0.9
      )
