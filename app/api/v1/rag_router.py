@@ -1,5 +1,8 @@
 from fastapi import APIRouter, UploadFile, File
 from app.rag.pipeline import build_pipeline
+from app.services.rag_service import ask_question
+from app.rag.retriever import get_vectorstore
+
 
 router = APIRouter()
 
@@ -14,10 +17,8 @@ async def index_pdf(file: UploadFile = File(...)):
     result = build_pipeline(path)
 
     return result
-from fastapi import APIRouter
-from app.services.rag_service import ask_question
 
-router = APIRouter()
+
 
 @router.post("/ask")
 async def ask(data: dict):
@@ -27,3 +28,29 @@ async def ask(data: dict):
     result = ask_question(question)
 
     return result
+
+
+
+
+
+
+@router.get("/chunks")
+def get_all_chunks():
+
+    vectorstore = get_vectorstore()
+
+    data = vectorstore._collection.get()
+
+    results = []
+
+    for i, text in enumerate(data["documents"]):
+        results.append({
+            "id": data["ids"][i],
+            "text": text,
+            "metadata": data["metadatas"][i]
+        })
+
+    return {
+        "total": len(results),
+        "chunks": results
+    }

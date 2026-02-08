@@ -2,6 +2,18 @@ import chromadb
 from langchain_community.vectorstores import Chroma
 from app.rag.embeddings import get_embeddings
 import os
+import chromadb
+
+def reset_chroma():
+
+    client = chromadb.HttpClient(host="chroma", port=8000)
+
+    try:
+        client.delete_collection("biomedical")
+        print("✅ Collection supprimée avec succès")
+    except:
+        print("⚠️ La collection n'existe pas encore")
+
 
 def store_chunks(chunks):
 

@@ -60,6 +60,7 @@
 #   postgres_data:
 #   chroma_data:
 #   ollama_data:
+
 services:
 
   api:
@@ -75,9 +76,13 @@ services:
       - hf_cache:/root/.cache/huggingface
 
     depends_on:
-      - db
-      - chroma
-      - ollama
+      chroma:
+        condition: service_started
+      db:
+        condition: service_started
+      ollama:
+        condition: service_started
+
 
     environment:
       - CHROMA_HOST=http://chroma:8000
