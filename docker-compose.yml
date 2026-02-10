@@ -147,6 +147,7 @@ services:
 
 
 
+
 volumes:
   postgres_data:
   chroma_data:
