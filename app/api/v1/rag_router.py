@@ -3,6 +3,13 @@ from app.rag.pipeline import build_pipeline
 from app.services.rag_service import ask_question
 from app.rag.retriever import get_vectorstore
 from pydantic import BaseModel
+import mlflow
+from app.monitoring.mlflow_logger import (
+    log_retriever_config,
+    log_retrieval_query,
+    start_retrieval_timer,
+    end_retrieval_timer
+)
 
 
 router = APIRouter()
@@ -38,9 +45,10 @@ class QuestionRequest(BaseModel):
 
 @router.post("/ask")
 async def ask(data: QuestionRequest):
+    with mlflow.start_run():
 
-    question = data.question
-    result = ask_question(question)
+        question = data.question
+        result = ask_question(question)
 
     return result
 

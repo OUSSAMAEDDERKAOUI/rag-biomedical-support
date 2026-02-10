@@ -6,6 +6,13 @@ from sentence_transformers import CrossEncoder
 from langchain.schema import BaseRetriever, Document
 from typing import List
 import hashlib
+import mlflow
+from app.monitoring.mlflow_logger import (
+    log_retriever_config,
+    log_retrieval_query,
+    start_retrieval_timer,
+    end_retrieval_timer
+)
 
 
 def get_vectorstore():
@@ -65,29 +72,65 @@ class HybridRetriever(BaseRetriever):
 
         return unique
 
+    # def _rerank(self, query: str, docs: List[Document]) -> List[Document]:
+    #     pairs = [(query, d.page_content) for d in docs]
+    #     scores = self.reranker.predict(pairs)
+
+    #     ranked = sorted(
+    #         zip(docs, scores),
+    #         key=lambda x: x[1],
+    #         reverse=True
+    #     )
+    #     for doc, score in ranked:
+    #         print(f"Score: {score:.4f} | Chunk: {doc.page_content}")
+    #     return [doc for doc, _ in ranked[: self.top_k]]
     def _rerank(self, query: str, docs: List[Document]) -> List[Document]:
+
         pairs = [(query, d.page_content) for d in docs]
         scores = self.reranker.predict(pairs)
-
+    
         ranked = sorted(
             zip(docs, scores),
             key=lambda x: x[1],
             reverse=True
         )
-        for doc, score in ranked:
-            print(f"Score: {score:.4f} | Chunk: {doc.page_content}")
-        return [doc for doc, _ in ranked[: self.top_k]]
+    
+        final_docs = [doc for doc, _ in ranked[: self.top_k]]
+        final_scores = [score for _, score in ranked[: self.top_k]]
+    
+        # ---- LOGGING MLflow ----
+        if mlflow.active_run():
+            log_retrieval_query(query, final_docs, final_scores)
+    
+        return final_docs
+
+
+    # def _get_relevant_documents(self, query: str) -> List[Document]:
+    #     dense_docs = self.dense_retriever.get_relevant_documents(query)
+    #     sparse_docs = self.bm25_retriever.get_relevant_documents(query)
+
+    #     merged = dense_docs + sparse_docs
+    #     deduped = self._deduplicate(merged)
+
+    #     return self._rerank(query, deduped)
+
+
 
     def _get_relevant_documents(self, query: str) -> List[Document]:
+
+        start = start_retrieval_timer()
+    
         dense_docs = self.dense_retriever.get_relevant_documents(query)
         sparse_docs = self.bm25_retriever.get_relevant_documents(query)
-
+    
         merged = dense_docs + sparse_docs
         deduped = self._deduplicate(merged)
-
-        return self._rerank(query, deduped)
-
-
+    
+        results = self._rerank(query, deduped)
+    
+        end_retrieval_timer(start)
+    
+        return results
 
 
 
@@ -118,12 +161,20 @@ def get_retriever():
         "cross-encoder/ms-marco-MiniLM-L-6-v2"
     )
 
-    return HybridRetriever(
-        dense_retriever=dense_retriever,
-        bm25_retriever=bm25_retriever,
-        reranker=reranker,
-        top_k=6
+
+    retriever = HybridRetriever(
+    dense_retriever=dense_retriever,
+    bm25_retriever=bm25_retriever,
+    reranker=reranker,
+    top_k=6
     )
+
+    # Log config une seule fois
+    if mlflow.active_run():
+        log_retriever_config()
+
+    return retriever
+
 
 
 

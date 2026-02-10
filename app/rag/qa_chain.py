@@ -43,6 +43,7 @@ from langchain_community.llms import Ollama
 from app.rag.retriever import get_retriever
 import os
 from langchain.prompts import PromptTemplate
+from app.monitoring.mlflow_logger import log_llm_params
 
 def get_qa_chain():
     # ollama_url = os.getenv("OLLAMA_URL", "http://ollama:11434/api/chat")
@@ -92,5 +93,16 @@ Priorité au Contexte : Si l'utilisateur demande une procédure non décrite ici
     chain_type="stuff",
     chain_type_kwargs={"prompt": prompt}
     )
+
+
+    log_llm_params({
+    "model": "mistral:latest",
+    "temperature": 0.3,
+    "top_k": 10,
+    "top_p": 0.9
+     })
+
+
+
 
     return qa_chain

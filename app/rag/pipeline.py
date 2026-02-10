@@ -3,7 +3,7 @@ from app.rag.chunking import hybrid_chunking
 from app.rag.vector_store import store_chunks,reset_chroma
 import json
 import os
-from app.monitoring.mlflow_logger import start_rag_run, log_rag_config
+from app.monitoring.mlflow_logger import start_rag_run
 
 
 
@@ -18,6 +18,8 @@ def save_chunks_debug(chunks):
 
 def build_pipeline(pdf_path):
     
+    start_rag_run()
+
     reset_chroma()
     docs = load_pdf(pdf_path)
     grouped_docs = group_docs_by_page(docs)
