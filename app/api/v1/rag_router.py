@@ -2,6 +2,7 @@ from fastapi import APIRouter, UploadFile, File
 from app.rag.pipeline import build_pipeline
 from app.services.rag_service import ask_question
 from app.rag.retriever import get_vectorstore
+from pydantic import BaseModel
 
 
 router = APIRouter()
@@ -20,18 +21,28 @@ async def index_pdf(file: UploadFile = File(...)):
 
 
 
+# @router.post("/ask")
+# async def ask(data:str):
+
+#     question = data.get("question")
+
+#     result = ask_question(question)
+
+#     return result
+
+
+class QuestionRequest(BaseModel):
+    question: str
+
+
+
 @router.post("/ask")
-async def ask(data:str):
+async def ask(data: QuestionRequest):
 
-    question = data.get("question")
-
+    question = data.question
     result = ask_question(question)
 
     return result
-
-
-
-
 
 
 @router.get("/chunks")

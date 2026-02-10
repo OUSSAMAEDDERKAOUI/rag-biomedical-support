@@ -67,18 +67,25 @@ llm = Ollama(
 
 retriever = get_retriever()
 
-template = """
-Tu es un assistant biomédical expert.
+template =     """
+            Tu es un assistant technique spécialisé dans la maintenance d'équipements biomédicaux. 
+            Ton unique mission est d'extraire des informations précises à partir des MANUELS fournis.
 
-Utilise UNIQUEMENT le contexte suivant pour répondre.
+            ### CONTEXTE DES MANUELS :
+            {context}
 
-Contexte :
-{context}
+            ### RÈGLES STRICTES :
+            
+Zéro Hallucination : Si l'information n'est pas explicitement écrite dans le texte ci-dessus, réponds exactement : "Je ne trouve pas l'information dans les manuels disponibles".
+Fidélité Technique : Ne reformule pas les codes d'erreur ou les valeurs de pression/température. Utilise le langage exact du manuel.
+Isolation de Connaissance : Ne réponds pas en utilisant tes propres connaissances générales sur le sujet. Si le manuel est silencieux, tu es silencieux.
+Priorité au Contexte : Si l'utilisateur demande une procédure non décrite ici, refuse d'y répondre.
 
-Question : {question}
+            ### QUESTION DE L'UTILISATEUR :
+            {question}
 
-Réponse en français :
-"""
+            RÉPONSE (en français) :
+            """
 
 prompt = PromptTemplate(
     template=template,
@@ -92,10 +99,71 @@ qa_chain = RetrievalQA.from_chain_type(
     chain_type_kwargs={"prompt": prompt}
 )
 
-question = "c'est quoi la féministe ."
+question = " A QUOI SERT UNE BALANCE Au laboratoire ?"
 print("\nQUESTION :", question)
 
 response = qa_chain.invoke({"query": question})
 
 print("\nRÉPONSE :")
 print(response)
+
+
+
+
+JUDGE_PROMPT = """
+Tu es un évaluateur objectif d’un système RAG.
+
+Question :
+{question}
+
+Contexte fourni :
+{context}
+
+Réponse générée :
+{answer}
+
+Évalue la réponse selon ces critères :
+- Fidélité au contexte (0-5)
+- Pertinence (0-5)
+- Clarté (0-5)
+
+Donne :
+- Un score total sur 15
+- Une justification courte (2 lignes max)
+
+Réponds en JSON.
+"""
+
+
+
+
+
+def llm_judge(llm, question, context, answer):
+    prompt = JUDGE_PROMPT.format(
+        question=question,
+        context=context,
+        answer=answer
+    )
+
+    result = llm(prompt)  # mistral local ou API
+    return result
+
+
+
+
+def evaluate_rag(query,context, response, llm):
+    
+
+
+    evaluation = llm_judge(
+        llm,
+        query,
+        context,
+        response
+    )
+
+    return {
+        "answer": response,
+        "evaluation": evaluation
+    }
+

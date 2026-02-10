@@ -6,7 +6,7 @@ retriever = get_retriever()
 
 print(" Retriever prêt")
 
-query = "Qu'est-ce que   le Laveur de microplaques ?"
+query = "Qu'est-ce que  Balances  ?"
 
 print(f"\n Recherche pour : {query}\n")
 

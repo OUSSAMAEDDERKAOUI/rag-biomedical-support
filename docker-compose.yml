@@ -135,6 +135,17 @@ services:
     ports:
       - 8080:8080
 
+  mlflow:
+    image: ghcr.io/mlflow/mlflow
+    container_name: rag_mlflow
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./mlflow_data:/mlflow
+    command: mlflow server --host 0.0.0.0 --backend-store-uri sqlite:////mlflow/mlflow.db
+
+
+
 
 volumes:
   postgres_data:

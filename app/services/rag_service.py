@@ -4,9 +4,11 @@ def ask_question(question: str):
 
     qa = get_qa_chain()
 
-    result = qa.run(question)
+    result = qa.invoke({"query": question})
 
     return {
         "question": question,
         "answer": result
     }
+
+    
