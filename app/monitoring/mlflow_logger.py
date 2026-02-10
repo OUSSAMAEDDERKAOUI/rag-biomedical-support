@@ -14,7 +14,7 @@ def start_rag_run():
     return mlflow.start_run(run_name=run_name)
 
 
-def log_rag_config(config: dict):
+def log_chunking_config(config: dict):
     for k, v in config.items():
         mlflow.log_param(k, v)
 
