@@ -44,7 +44,7 @@ from app.rag.retriever import get_retriever
 import os
 from langchain.prompts import PromptTemplate
 from app.monitoring.mlflow_logger import log_llm_params
-
+import mlflow
 def get_qa_chain():
     # ollama_url = os.getenv("OLLAMA_URL", "http://ollama:11434/api/chat")
     
@@ -102,6 +102,10 @@ Priorité au Contexte : Si l'utilisateur demande une procédure non décrite ici
     "top_p": 0.9
      })
 
+    mlflow.langchain.log_model(
+            qa_chain,
+            artifact_path="rag_chain"
+    )
 
 
 
