@@ -1,12 +1,14 @@
 from app.rag.retriever import get_retriever
+from app.monitoring.mlflow_logger import start_rag_run
+import mlflow
 
 print(" Initialisation du retriever...")
-
-retriever = get_retriever()
+with start_rag_run("retrieval","HybridRetriever_dense_bm25"):
+    retriever = get_retriever()
 
 print(" Retriever prêt")
 
-query = "Qu'est-ce que  Balances  ?"
+query = "Qu'est-ce que  Outils utilisés en CI/CD  ?"
 
 print(f"\n Recherche pour : {query}\n")
 

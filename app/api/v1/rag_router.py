@@ -4,6 +4,7 @@ from app.services.rag_service import ask_question
 from app.rag.retriever import get_vectorstore
 from pydantic import BaseModel
 import mlflow
+from app.monitoring.mlflow_logger import start_rag_run
 
 from app.monitoring.mlflow_logger import (
     log_retriever_config,
@@ -46,12 +47,18 @@ class QuestionRequest(BaseModel):
 
 @router.post("/ask")
 async def ask(data: QuestionRequest):
-    with mlflow.start_run():
+    with start_rag_run("RetrievalQA","HybridRetriever_dense_bm25_mistral"):
 
         question = data.question
         result = ask_question(question)
 
     return result
+
+
+
+
+
+
 
 
 @router.get("/chunks")

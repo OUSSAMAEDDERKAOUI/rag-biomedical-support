@@ -57,7 +57,8 @@ from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
 from app.rag.retriever import get_retriever
 import os
-
+from app.monitoring.mlflow_logger import start_rag_run
+import mlflow
 ollama_url = os.getenv("OLLAMA_URL")  
 
 llm = Ollama(
@@ -65,7 +66,13 @@ llm = Ollama(
     base_url="http://ollama:11434"
 )
 
-retriever = get_retriever()
+
+with start_rag_run("retrieval","HybridRetriever_dense_bm25"):
+
+    retriever = get_retriever()
+
+
+
 
 template =     """
             Tu es un assistant technique spécialisé dans la maintenance d'équipements biomédicaux. 

@@ -72,18 +72,7 @@ class HybridRetriever(BaseRetriever):
 
         return unique
 
-    # def _rerank(self, query: str, docs: List[Document]) -> List[Document]:
-    #     pairs = [(query, d.page_content) for d in docs]
-    #     scores = self.reranker.predict(pairs)
-
-    #     ranked = sorted(
-    #         zip(docs, scores),
-    #         key=lambda x: x[1],
-    #         reverse=True
-    #     )
-    #     for doc, score in ranked:
-    #         print(f"Score: {score:.4f} | Chunk: {doc.page_content}")
-    #     return [doc for doc, _ in ranked[: self.top_k]]
+    
     def _rerank(self, query: str, docs: List[Document]) -> List[Document]:
 
         pairs = [(query, d.page_content) for d in docs]
@@ -104,15 +93,6 @@ class HybridRetriever(BaseRetriever):
     
         return final_docs
 
-
-    # def _get_relevant_documents(self, query: str) -> List[Document]:
-    #     dense_docs = self.dense_retriever.get_relevant_documents(query)
-    #     sparse_docs = self.bm25_retriever.get_relevant_documents(query)
-
-    #     merged = dense_docs + sparse_docs
-    #     deduped = self._deduplicate(merged)
-
-    #     return self._rerank(query, deduped)
 
 
 
@@ -135,7 +115,7 @@ class HybridRetriever(BaseRetriever):
 
 
 def get_retriever():
-
+    
     vectorstore = get_vectorstore()
 
     dense_retriever = vectorstore.as_retriever(

@@ -18,23 +18,11 @@ def save_chunks_debug(chunks):
 
 def build_pipeline(pdf_path):
 
-    # start_rag_run()
-
-    # reset_chroma()
-    # docs = load_pdf(pdf_path)
-    # grouped_docs = group_docs_by_page(docs)
-
-    # # chunks = semantic_chunking(grouped_docs)
-    # with mlflow.start_run(run_name="rag_index_build"):
-
-    #     chunks = hybrid_chunking(grouped_docs)
-
-    # save_chunks_debug(chunks)
-    # store_chunks(chunks)
+   
 
 
 
-    with start_rag_run():
+    with start_rag_run("indexing ","hybrid_chunking"):
 
         reset_chroma()
         docs = load_pdf(pdf_path)

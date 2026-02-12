@@ -108,12 +108,20 @@ def init_mlflow():
     mlflow.set_experiment(EXPERIMENT)
 
 
-def start_rag_run():
+
+def start_rag_run(run_type: str, suffix: str = ""):
     init_mlflow()
+
     if mlflow.active_run():
         mlflow.end_run()
-    run_name = f"rag_run_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+    run_name = f"{run_type}_{suffix}_{timestamp}" if suffix else f"{run_type}_{timestamp}"
+
     return mlflow.start_run(run_name=run_name)
+
+
 
 
 def log_chunking_config(config: dict):
@@ -144,21 +152,17 @@ def log_retriever_config():
 
     mlflow.log_params({
 
-        # Vector DB
         "vector_db": "chroma",
         "collection_name": "biomedical",
 
-        # Dense retriever
         "retrieval_type": "hybrid",
         "dense_search_type": "mmr",
         "dense_k": 6,
         "dense_fetch_k": 20,
         "dense_lambda": 0.8,
 
-        # Sparse retriever
         "bm25_k": 1,
 
-        # Reranker
         "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
         "rerank_top_k": 6
     })
