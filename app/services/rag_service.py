@@ -10,14 +10,14 @@ def ask_question(question: str):
     result = qa.invoke({"query": question})
     log_answer(question, result)
     retriever = get_retriever()
-    contexts = retriever.get_relevant_documents(question)
+    # contexts = retriever.get_relevant_documents(question)
 
-    results = evaluate_rag(question, result, contexts)
+    # results = evaluate_rag(question, result, contexts)
 
     return {
         "question": question,
         "answer": result,
-        "answer evaluation":results
+        # "answer evaluation":results
     }
 
     

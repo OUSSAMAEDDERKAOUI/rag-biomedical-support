@@ -4,6 +4,7 @@ from app.services.rag_service import ask_question
 from app.rag.retriever import get_vectorstore
 from pydantic import BaseModel
 import mlflow
+
 from app.monitoring.mlflow_logger import (
     log_retriever_config,
     log_retrieval_query,

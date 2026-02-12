@@ -4,7 +4,7 @@ from app.rag.vector_store import store_chunks,reset_chroma
 import json
 import os
 from app.monitoring.mlflow_logger import start_rag_run
-
+import mlflow
 
 
 
@@ -17,23 +17,41 @@ def save_chunks_debug(chunks):
         json.dump(chunks, f, indent=4, ensure_ascii=False)
 
 def build_pipeline(pdf_path):
-    
-    start_rag_run()
 
-    reset_chroma()
-    docs = load_pdf(pdf_path)
-    grouped_docs = group_docs_by_page(docs)
+    # start_rag_run()
 
-    # chunks = semantic_chunking(grouped_docs)
-    chunks = hybrid_chunking(grouped_docs)
+    # reset_chroma()
+    # docs = load_pdf(pdf_path)
+    # grouped_docs = group_docs_by_page(docs)
 
-    save_chunks_debug(chunks)
-    store_chunks(chunks)
+    # # chunks = semantic_chunking(grouped_docs)
+    # with mlflow.start_run(run_name="rag_index_build"):
+
+    #     chunks = hybrid_chunking(grouped_docs)
+
+    # save_chunks_debug(chunks)
+    # store_chunks(chunks)
+
+
+
+    with start_rag_run():
+
+        reset_chroma()
+        docs = load_pdf(pdf_path)
+        grouped_docs = group_docs_by_page(docs)
+
+        chunks = hybrid_chunking(grouped_docs)
+
+        save_chunks_debug(chunks)
+        store_chunks(chunks)
+
+        mlflow.log_param("nb_documents", len(grouped_docs))
+        mlflow.log_param("nb_chunks", len(chunks))
 
     return {
         "documents": len(grouped_docs),
         "nb_chunks": len(chunks),
         "chunks": chunks[:10]
     }
-    
-    
+
+

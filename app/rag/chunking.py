@@ -87,7 +87,11 @@ from langchain_community.embeddings import HuggingFaceEmbeddings
 from app.monitoring.mlflow_logger import  log_chunking_config
 
 # Charger une seule fois
-EMBEDDINGS = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+# EMBEDDINGS = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+EMBEDDINGS = HuggingFaceEmbeddings(
+    model_name="BAAI/bge-base-en-v1.5"
+)
+
 SEMANTIC_SPLITTER = SemanticChunker(EMBEDDINGS)
 
 RECURSIVE_SPLITTER = RecursiveCharacterTextSplitter(
@@ -144,23 +148,38 @@ def hybrid_chunking(docs):
 
 
 
+    # log_chunking_config({
+    #     "chunking_strategy": "hybrid",
+    #     "semantic_chunker": "SemanticChunker",
+    #     "embedding_model_chunking": "all-MiniLM-L6-v2",
+
+    #     "recursive_chunk_size": 600,
+    #     "recursive_overlap": 120,
+
+    #     "min_chunk_length": 80,
+    #     "max_semantic_length": 900,
+
+    #     "text_cleaning": True,
+
+    #     # === EMBEDDING ===
+    #     "embedding_model": "all-MiniLM-L6-v2",
+    #     "embedding_dimension": 384
+    # })
+    
     log_chunking_config({
-        "chunking_strategy": "hybrid",
-        "semantic_chunker": "SemanticChunker",
-        "embedding_model_chunking": "all-MiniLM-L6-v2",
+    "chunking_strategy": "hybrid",
+    "semantic_chunker": SEMANTIC_SPLITTER.__class__.__name__,
+    "embedding_model_chunking": EMBEDDINGS.model_name,
 
-        "recursive_chunk_size": 600,
-        "recursive_overlap": 120,
+    "recursive_chunk_size": RECURSIVE_SPLITTER._chunk_size,
+    "recursive_overlap": RECURSIVE_SPLITTER._chunk_overlap,
 
-        "min_chunk_length": 80,
-        "max_semantic_length": 900,
+    "min_chunk_length": 80,
+    "max_semantic_length": 900,
 
-        "text_cleaning": True,
-
-        # === EMBEDDING ===
-        "embedding_model": "all-MiniLM-L6-v2",
-        "embedding_dimension": 384
+    "text_cleaning": True,
     })
+
 
 
 
