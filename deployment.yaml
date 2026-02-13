@@ -1,0 +1,96 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: project-deployement
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      env: prod
+  template:
+    metadata:
+      labels:
+        env: prod
+    spec:
+      containers:
+        - name: rag-app
+          image: oussamaedderkaoui/rag-biomedical-support-api:latest
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - configMapRef:
+                name: app-config
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  POSTGRES_USER: "postgres"
+  POSTGRES_PASSWORD: "postgres"
+  POSTGRES_DB: "rag_db"
+  # POSTGRES_HOST: "postgres-svc"
+  # POSTGRES_PORT: "5432"
+  # SECRET_KEY: "your-secret-key-here-change-in-production"
+  # ALGORITHM: "HS256"
+  # ACCESS_TOKEN_EXPIRE_MINUTES: "30"
+  # GOOGLE_CLIENT_ID: "dummy"
+  # GOOGLE_CLIENT_SECRET: "dummy"
+  # GOOGLE_REDIRECT_URI: "http://localhost/api/auth/google/callback"
+  # GROQ_API_KEY: "dummy-key-for-now"
+  # GOOGLE_GEMINI_API_KEY: "dummy-key-for-now"
+
+  DATABASE_URL: "postgresql://postgres:postgres@postgres-svc:5432/rag_db"
+
+  SECRET_KEY: "supersecretkey123"
+  ALGORITHM: "HS256"
+  ACCESS_TOKEN_EXPIRE_MINUTES: "60"
+  
+  EMBEDDING_MODEL: "BAAI/bge-base-en-v1.5"
+  VECTOR_DB: "chroma"
+  
+  CHROMA_HOST: "http://chroma: 8000"
+  
+
+  OLLAMA_URL: "http://ollama:11434"
+  
+  DATA_DIR: "/app/data"
+  MLFLOW_TRACKING_URI: "http://mlflow:5000"
+  MLFLOW_EXPERIMENT: "rag_biomedical"
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-deployement
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:15
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - configMapRef:
+                name: app-config
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-svc
+spec:
+  selector:
+    app: postgres
+  ports:
+    - port: 5432
+      targetPort: 5432

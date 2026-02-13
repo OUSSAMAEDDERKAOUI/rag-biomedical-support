@@ -28,3 +28,4 @@ opencv-python
 requests
 mlflow
 deepeval
+ollama
