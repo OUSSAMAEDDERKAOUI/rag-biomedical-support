@@ -1,10 +1,24 @@
-import pytest
-import os
+# tests/conftest.py
 
-@pytest.fixture(scope="session", autouse=True)
-def setup_test_env():
-    """Configure l'environnement de test"""
-    os.environ["DATABASE_URL"] = "postgresql://postgres:postgres@localhost:5432/rag_db"
-    os.environ["SECRET_KEY"] = "test-secret-key"
-    os.environ["ALGORITHM"] = "HS256"
-    os.environ["EMBEDDING_MODEL"] = "BAAI/bge-base-en-v1.5"
+import pytest
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from app.database import Base
+from app.main import app
+from app.dependencies import get_db
+
+SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
+
+engine = create_engine(SQLALCHEMY_DATABASE_URL)
+TestingSessionLocal = sessionmaker(bind=engine)
+
+Base.metadata.create_all(bind=engine)
+
+def override_get_db():
+    db = TestingSessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+app.dependency_overrides[get_db] = override_get_db
