@@ -51,23 +51,30 @@ def test_hybrid_chunking(
 
 
 
+from unittest.mock import patch, MagicMock
+from app.rag.embeddings import get_embeddings
 
 def test_embedding_model_loads():
-    with patch("app.rag.embeddings.get_embeddings") as mock_get_model:
-        fake_model = MagicMock()
-        mock_get_model.return_value = fake_model
+    with patch("app.rag.embeddings.HuggingFaceEmbeddings") as mock_hf:
+        mock_instance = MagicMock()
+        mock_hf.return_value = mock_instance
 
         model = get_embeddings()
-        assert model is not None
-        mock_get_model.assert_called_once()
 
+        mock_hf.assert_called_once_with(
+            model_name="BAAI/bge-base-en-v1.5"
+        )
+        assert model == mock_instance
+
+import numpy as np
+from unittest.mock import patch, MagicMock
+from app.rag.embeddings import get_embeddings
 
 def test_embedding_generation():
-    with patch("app.rag.embeddings.get_embeddings") as mock_get_model:
+    with patch("app.rag.embeddings.HuggingFaceEmbeddings") as mock_hf:
         fake_model = MagicMock()
-
         fake_model.encode.return_value = np.zeros(768)
-        mock_get_model.return_value = fake_model
+        mock_hf.return_value = fake_model
 
         model = get_embeddings()
         embedding = model.encode("Test de maintenance biomédicale")
@@ -75,3 +82,5 @@ def test_embedding_generation():
         assert embedding is not None
         assert len(embedding) == 768
         assert embedding.shape[0] == 768
+        mock_hf.assert_called_once_with(model_name="BAAI/bge-base-en-v1.5")
+        fake_model.encode.assert_called_once_with("Test de maintenance biomédicale")
