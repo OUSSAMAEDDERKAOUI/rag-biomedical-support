@@ -86,15 +86,17 @@ from app.rag.retriever import get_retriever
 from app.monitoring.evaluator import evaluate_rag 
 from app.monitoring.mlflow_logger import log_answer
 from langchain_community.llms import Ollama
+from app.core.config import settings
 
 from deepeval.models.llms.ollama_model import OllamaModel as DeepEvalOllamaModel
 
 # LLM local Ollama
 llm = Ollama(model="mistral:latest", base_url="http://ollama:11434")
 local_llm_model = DeepEvalOllamaModel(
-    model="mistral",
+    model="mistral:latest",
     base_url="http://ollama:11434"
 )
+
 
 def ask_question(question: str):
     qa = get_qa_chain()
@@ -108,9 +110,8 @@ def ask_question(question: str):
     retriever = get_retriever()
     contexts = retriever.get_relevant_documents(question)
     contexts_text = [doc.page_content for doc in contexts]
-
-    # Évaluation avec DeepEval et LLM local
-    results = evaluate_rag(question, answer_text, contexts_text, llm_model=local_llm_model)
+    if settings.ENABLE_EVALUATION:
+        results = evaluate_rag(question, answer_text, contexts_text, llm_model=local_llm_model)
 
     return {
         "question": question,

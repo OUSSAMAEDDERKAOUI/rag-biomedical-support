@@ -17,6 +17,7 @@ class Settings(BaseSettings):
     CHROMA_HOST: str
     OLLAMA_URL: str
     DATA_DIR: str
+    ENABLE_EVALUATION: bool = True   
 
     class Config:
         env_file = ".env"

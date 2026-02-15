@@ -14,7 +14,8 @@ spec:
     spec:
       containers:
         - name: rag-app
-          image: oussamaedderkaoui/rag-biomedical-support-api:latest
+          image: oussamaedderkaoui/rag-biomedical-support-api:v2
+          imagePullPolicy: Always
           ports:
             - containerPort: 8000
           envFrom:
