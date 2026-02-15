@@ -1,0 +1,57 @@
+import pytest
+from app.rag.chunking import hybrid_chunking
+from app.rag.embeddings import get_embedding_model
+
+import pytest
+from unittest.mock import patch, MagicMock
+
+from app.rag.chunking import hybrid_chunking
+
+
+@patch("app.rag.chunking.log_chunking_config")
+@patch("app.rag.chunking.RECURSIVE_SPLITTER")
+@patch("app.rag.chunking.SEMANTIC_SPLITTER")
+def test_hybrid_chunking(
+    mock_semantic_splitter,
+    mock_recursive_splitter,
+    mock_log_config,
+):
+    
+    mock_semantic_splitter.split_text.return_value = [
+        "Texte valide " * 10 
+    ]
+
+    mock_recursive_splitter.split_text.return_value = [
+        "Sous chunk valide " * 10
+    ]
+
+   
+    docs = [
+        {
+            "text": "Ceci est un document de test. " * 20,
+            "metadata": {"source": "test_doc"}
+        }
+    ]
+
+    
+    chunks = hybrid_chunking(docs)
+
+    
+    assert isinstance(chunks, list)
+    assert len(chunks) > 0
+
+    first_chunk = chunks[0]
+
+    assert "text" in first_chunk
+    assert "metadata" in first_chunk
+
+    assert first_chunk["metadata"]["doc_id"] == 0
+    assert first_chunk["metadata"]["semantic_part"] == 0
+    assert first_chunk["metadata"]["sub_part"] == 0
+
+    mock_log_config.assert_called_once()
+
+
+
+
+
