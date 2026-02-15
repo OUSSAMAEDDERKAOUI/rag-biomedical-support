@@ -2,11 +2,9 @@ import pytest
 from app.rag.chunking import hybrid_chunking
 from app.rag.embeddings import get_embeddings
 
-import pytest
+
+import numpy as np
 from unittest.mock import patch, MagicMock
-
-from app.rag.chunking import hybrid_chunking
-
 
 @patch("app.rag.chunking.log_chunking_config")
 @patch("app.rag.chunking.RECURSIVE_SPLITTER")
@@ -62,3 +60,18 @@ def test_embedding_model_loads():
         model = get_embeddings()
         assert model is not None
         mock_get_model.assert_called_once()
+
+
+def test_embedding_generation():
+    with patch("app.rag.embeddings.get_embeddings") as mock_get_model:
+        fake_model = MagicMock()
+
+        fake_model.encode.return_value = np.zeros(768)
+        mock_get_model.return_value = fake_model
+
+        model = get_embeddings()
+        embedding = model.encode("Test de maintenance biomédicale")
+
+        assert embedding is not None
+        assert len(embedding) == 768
+        assert embedding.shape[0] == 768
