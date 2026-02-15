@@ -1,6 +1,6 @@
 import pytest
 from app.rag.chunking import hybrid_chunking
-from app.rag.embeddings import get_embedding_model
+from app.rag.embeddings import get_embeddings
 
 import pytest
 from unittest.mock import patch, MagicMock
@@ -54,4 +54,11 @@ def test_hybrid_chunking(
 
 
 
+def test_embedding_model_loads():
+    with patch("app.rag.embeddings.get_embeddings") as mock_get_model:
+        fake_model = MagicMock()
+        mock_get_model.return_value = fake_model
 
+        model = get_embeddings()
+        assert model is not None
+        mock_get_model.assert_called_once()
