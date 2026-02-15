@@ -114,14 +114,13 @@ jobs:
         pip install -r requirements-test.txt
         pip install pytest pytest-cov
 
-    - name: Configure PYTHONPATH and Run tests
+    - name: Run tests
       env:
         DATABASE_URL: postgresql://postgres:postgres@localhost:5432/rag_db
         SECRET_KEY: test-secret-key
         ALGORITHM: HS256
+        PYTHONPATH: ${{ github.workspace }}
       run: |
-        # Ajouter la racine du repo au PYTHONPATH pour que "from app..." fonctionne
-        echo "PYTHONPATH=$(pwd)" >> $GITHUB_ENV
         pytest tests/ -v --cov=app --cov-report=xml
     
     - name: Upload coverage
