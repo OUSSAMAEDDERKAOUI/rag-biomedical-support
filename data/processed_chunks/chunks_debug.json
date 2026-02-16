@@ -1,52 +1,82 @@
 [
     {
-        "text": "Langages de Programmation & Backend : Python, PHP, JavaScript, Laravel, FastAPI. Frontend & Data Apps : Tailwind CSS, Bootstrap, Streamlit, ReactJS. Bases de Données: MySQL, PostgreSQL, MongoDB, Snowflake, ChromaDB. Machine Learning & Deep Learning : TensorFlow, PyTorch, Keras, Scikit-Learn, Spark MLlib, Transfer Learning. Big Data & Orchestration : Apache Spark, Apache Airflow, Selenium(Scraping). Data Cleaning & Analytics : Pandas, NumPy, Matplotlib, Seaborn. Natural Language Processing (NLP): NLTK, SpaCy, NER, Transformers, LangChain, LLMOps & RAG/Agents. Gestion de Projets : Jira, Trello, Méthodologie Agile (SCRUM).",
+        "text": "CI/CD : Présentation et Utilisation CI/CD signifie : — CI : Continuous Integration (Intégration Continue) — CD : Continuous Delivery ou Continuous Deployment (Livraison Conti- nue ou Déploiement Continu) Le CI/CD est un ensemble de pratiques et d’outils permettant d’automa- tiser le développement, les tests et le déploiement des applications logicielles. Dans un projet logiciel moderne, plusieurs développeurs travaillent simul- tanément sur le même code.",
         "metadata": {
             "page": 1,
             "doc_id": 0,
             "semantic_part": 0,
             "sub_part": 0,
-            "length": 627
+            "length": 458
         }
     },
     {
-        "text": "¢ Développement d'une plateforme interne de gestion immobiliére avec un Front-End dynamique sous Blade, Bootstrap. ¢ Optimisation de la base de données MySQL via une conception UML et des requétes performantes. ¢ Gestion du projet en méthodologie Agile (Scrum) avec GitHub Planning et JIRA, en utilisant PHP, Laravel et des outils collaboratifs modernes. ¢ Responsabilités : Contréle qualité des produits finis, vérification de la conformité et élaboration des rapports. TABLE ROW: Développement Web et Intelligence Artificielle 4 YouCode - UM6P , SAFI 2024-2026 (en DEUG en Sciences Economiques et",
+        "text": "Sans CI/CD, on rencontre souvent les problèmes suivants : — conflits fréquents entre les versions du code, — erreurs détectées trop tard, — déploiements manuels et risqués, — perte de temps dans les tâches répétitives, — difficultés à maintenir la qualité du projet. — automatiser les tests, — détecter rapidement les erreurs, — livrer plus vite les nouvelles fonctionnalités, — réduire les risques en production, — améliorer la collaboration entre développeurs. L’intégration continue consiste à :",
         "metadata": {
             "page": 1,
             "doc_id": 0,
             "semantic_part": 1,
             "sub_part": 0,
-            "length": 598
+            "length": 498
         }
     },
     {
-        "text": "Développement Web et Intelligence Artificielle 4 YouCode - UM6P , SAFI 2024-2026 (en DEUG en Sciences Economiques et Gestion 4 FSEJS d’El Jadida. 2021-2024 Baccalauréat International - option francais, Sciences Physiques (candidat libre) . 2020-2021 Licence en sciences de la matiére physique a la Faculté des Sciences, El Jadida. 2016-2019 Baccalauréat Sciences Physiques au Lycée Qualifiant SIDI BENNOUR 2015-2016 ¢ AeroStream: Systéme IA de classification de sentiments des avis clients aériennes, avec pipeline NLP automatisé et dashboard de suivi des KPI en temps réel. Stack : Python, Hugging",
+        "text": "— intégrer fréquemment le code dans un dépôt partagé, — exécuter automatiquement des tests à chaque modification, — vérifier que le nouveau code ne casse pas l’existant. Le processus typique du CI est : 1. un développeur modifie le code, 2. il envoie (push) ses changements vers Git, 3. un outil CI exécute automatiquement : — les tests unitaires, — les tests d’intégration, — l’analyse du code, — la construction de l’application. Si une étape échoue, le développeur est immédiatement informé.",
         "metadata": {
-            "page": 1,
-            "doc_id": 0,
-            "semantic_part": 1,
-            "sub_part": 1,
-            "length": 598
+            "page": 2,
+            "doc_id": 1,
+            "semantic_part": 0,
+            "sub_part": 0,
+            "length": 494
         }
     },
     {
-        "text": "clients aériennes, avec pipeline NLP automatisé et dashboard de suivi des KPI en temps réel. Stack : Python, Hugging Face, Sentence Transformers, Scikit-learn, FastAPI, ChromaDB, PostgreSQL, Streamlit, Airflow. * FootballMatch Predictor : projet Data & IA de collecte et nettoyage de données football par web scraping, stockage en base PostgreSQL et prédiction des résultats via Machine Learning. Stack : Python, Selenium, Scikit-learn, PostgreSQL. ¢ Systéme Intelligent d’Analyse Médicale par Deep Learning : Détection de tumeurs cérébrales (YOLOVv8) et classification de cellules sanguines",
+        "text": "Le CD correspond à la partie déploiement. Il existe deux niveaux : — Continuous Delivery : Le code est toujours prêt à être déployé, mais le déploiement final est manuel. — Continuous Deployment : Le déploiement en production est totale- ment automatique. Le CD permet donc : — d’automatiser la mise en production, — de réduire les erreurs humaines, — de livrer plus rapidement aux utilisateurs. Plusieurs outils permettent de mettre en place une chaîne CI/CD : — GitHub Actions — GitLab CI/CD — Jenkins — CircleCI — Azure DevOps — Travis CI Pour les conteneurs et le déploiement : — Docker — Kubernetes — Ansible",
         "metadata": {
-            "page": 1,
-            "doc_id": 0,
+            "page": 2,
+            "doc_id": 1,
             "semantic_part": 1,
-            "sub_part": 2,
-            "length": 591
+            "sub_part": 0,
+            "length": 613
         }
     },
     {
-        "text": "Médicale par Deep Learning : Détection de tumeurs cérébrales (YOLOVv8) et classification de cellules sanguines cancéreuses (PyTorch) intégrées dans une solution unifiée pour un diagnostic assisté automatisé précis. ¢ Anglais : Intermédiaire ¢ Arbitrage de Football : Dipl6me d'arbitrage (2019-2021) + Photographie ¢ Voyages",
+        "text": "Un pipeline CI/CD classique contient : 1. Build : compilation du code 2. Test : exécution des tests 3. Analyse : vérification de la qualité du code 4. Packaging : création d’une application exécutable 5. Deployment : mise en production Exemple simplifié d’un pipeline : 3. build application 4. create docker image Le CI/CD est aussi très important en Machine Learning. On parle souvent de : — CI/CD pour le code — CI/CD pour les données — CI/CD pour les modèles Exemple de pipeline CI/CD ML : 1. entraînement automatique du modèle, 2.",
         "metadata": {
-            "page": 1,
-            "doc_id": 0,
+            "page": 3,
+            "doc_id": 2,
+            "semantic_part": 0,
+            "sub_part": 0,
+            "length": 534
+        }
+    },
+    {
+        "text": "évaluation des performances, 3. validation du modèle, 4. déploiement en production. Des outils comme MLflow ou Kubeflow sont souvent utilisés avec CI/CD.",
+        "metadata": {
+            "page": 3,
+            "doc_id": 2,
             "semantic_part": 1,
-            "sub_part": 3,
-            "length": 323
+            "sub_part": 0,
+            "length": 153
+        }
+    },
+    {
+        "text": "Les principaux avantages sont : — gain de temps, — meilleure qualité du code, — déploiements rapides et fiables, — réduction des bugs en production, — processus entièrement automatisé. Le CI/CD est aujourd’hui une pratique essentielle du développement lo- giciel moderne.",
+        "metadata": {
+            "page": 4,
+            "doc_id": 3,
+            "semantic_part": 0,
+            "sub_part": 0,
+            "length": 271
+        }
+    },
+    {
+        "text": "— automatiser le cycle de développement, — améliorer la collaboration, — sécuriser les déploiements, — livrer des applications plus rapidement et avec plus de qualité. Toute équipe de développement professionnelle utilise aujourd’hui une chaîne CI/CD.",
+        "metadata": {
+            "page": 4,
+            "doc_id": 3,
+            "semantic_part": 1,
+            "sub_part": 0,
+            "length": 251
         }
     }
 ]

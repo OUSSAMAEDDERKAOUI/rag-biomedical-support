@@ -107,6 +107,7 @@ def ask_question(question: str):
     log_answer(question, answer_text)
 
     # Récupérer contextes
+    results = None
     retriever = get_retriever()
     contexts = retriever.get_relevant_documents(question)
     contexts_text = [doc.page_content for doc in contexts]
