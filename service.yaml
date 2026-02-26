@@ -8,5 +8,5 @@ spec:
     env: prod
   ports:
     - nodePort: 30000
-      port: 8000
+      port: 8007
       targetPort: 8000
